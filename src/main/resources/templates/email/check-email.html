@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div>
+    <div th:if="${error != null}">
+        <p >StudyCafe Enrollment</p>
+        <div th:text="${error}"></div>
+        <p th:text="${email}">your@email.com</p>
+    </div>
+
+    <div th:if="${error == null}">
+        <p >StudyCafe Enrollment</p>
+
+        <h2>To use StudyCafe check your email verification.</h2>
+
+        <div>
+            <p th:text="${email}">your@email.com</p>
+            <a th:href="@{/resend-confirm-email}">Resend verification email</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
