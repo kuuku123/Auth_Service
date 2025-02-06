@@ -3,7 +3,8 @@ package org.example.auth_service.security;
 
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import org.example.auth_service.security.config.AuthEntityService;
+import org.example.auth_service.security.config.auth_entity.AuthEntityService;
+import org.example.auth_service.security.dto.SignUpForm;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

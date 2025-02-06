@@ -1,4 +1,4 @@
-package org.example.auth_service.security.config;
+package org.example.auth_service.security.config.auth_entity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
