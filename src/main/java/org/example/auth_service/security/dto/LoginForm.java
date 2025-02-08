@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 public class LoginForm {
 
     @NotBlank
-    private String email;
+    private String nicknameOrEmail;
 
     @NotBlank
     @Length(min = 1, max = 50)
