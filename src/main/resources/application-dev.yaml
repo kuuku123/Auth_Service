@@ -74,3 +74,8 @@ jwt:
 app:
   server:
     url: http://localhost:8081
+auth:
+  server:
+    url: http://localhost:8084
+front:
+  redirectUrl: http://localhost:3000

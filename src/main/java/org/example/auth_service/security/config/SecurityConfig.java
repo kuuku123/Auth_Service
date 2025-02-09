@@ -24,14 +24,15 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable);
+    http.logout(AbstractHttpConfigurer::disable);
 
     http.oauth2Login(oauth2 -> oauth2
-        .userInfoEndpoint(
-            userInfoEndpointConfig -> userInfoEndpointConfig
-                .userService(customOAuth2UserService))
-        .authorizationEndpoint(authEndpoint -> authEndpoint.authorizationRequestResolver(
-            new CustomAuthorizationRequestResolver(clientRegistrationRepository)))
-        .successHandler(oAuth2SuccessHandler));  // OAuth2
+      .userInfoEndpoint(
+        userInfoEndpointConfig -> userInfoEndpointConfig
+          .userService(customOAuth2UserService))
+      .authorizationEndpoint(authEndpoint -> authEndpoint.authorizationRequestResolver(
+        new CustomAuthorizationRequestResolver(clientRegistrationRepository)))
+      .successHandler(oAuth2SuccessHandler));  // OAuth2
 
     return http.build();
   }

@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class AuthEntityExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
-        ApiResponse<String> signupFailed = new ApiResponse<>("signup failed", HttpStatus.BAD_REQUEST, e.getMessage());
-        return new ResponseEntity<>(new Gson().toJson(signupFailed), HttpStatus.BAD_REQUEST);
-    }
+  @ExceptionHandler(UserNotFoundException.class)
+  public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
+    ApiResponse<String> signupFailed = new ApiResponse<>(e.getMessage(), HttpStatus.BAD_REQUEST,
+      e.getMessage());
+    return new ResponseEntity<>(new Gson().toJson(signupFailed), HttpStatus.BAD_REQUEST);
+  }
 }
