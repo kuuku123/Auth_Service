@@ -65,8 +65,6 @@ server:
         http-only: false
         name: StudyCafe_Session_Cookie
       timeout: 30m
-  session:
-    store-type: redis
 
 jwt:
   secret: tonylimkeytonylimkeytonylimkeytonylimkeytonylimkey
