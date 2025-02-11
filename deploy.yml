@@ -1,0 +1,8 @@
+services:
+  app:
+    image: kuuku123/auth-service:latest
+    ports:
+      - "8083:8083" # Map container port to host
+    entrypoint: ["java", "-jar", "-Djasypt.encryptor.password=my_jasypt_key", "-Dspring.profiles.active=prod", "/app/auth-service.jar"]
+
+
