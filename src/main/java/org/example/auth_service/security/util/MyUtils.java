@@ -12,7 +12,7 @@ public class MyUtils {
     tokenCookie.setHttpOnly(
       true);
     tokenCookie.setSecure(
-      true);
+      false);
     tokenCookie.setPath("/");
     response.addCookie(tokenCookie);
   }
