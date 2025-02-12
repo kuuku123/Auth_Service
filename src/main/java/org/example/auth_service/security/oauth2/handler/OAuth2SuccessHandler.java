@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.auth_service.rest_api.service.RestApiService;
 import org.example.auth_service.security.oauth2.dto.OAuth2Dto;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
   private final RestApiService restApiService;
@@ -47,7 +49,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     oAuth2Dto.setAttributes(attributes);
     oAuth2Dto.setProvider(provider);
 
+    log.info("trying to call fireSocialLoginRequest");
     String redirectUrl = restApiService.fireSocialLoginRequest(oAuth2Dto);
+    log.info("redirect to " + redirectUrl);
 
     if (redirectUrl != null && redirectUrl.startsWith("redirect:")) {
       redirectUrl = redirectUrl.substring("redirect:".length());
