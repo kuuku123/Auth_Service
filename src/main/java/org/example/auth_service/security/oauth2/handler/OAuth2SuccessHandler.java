@@ -80,7 +80,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
       tokenCookie.setHttpOnly(
         true);      // Prevents client-side JavaScript from accessing the cookie
       tokenCookie.setSecure(
-        true);        // Ensure the cookie is sent over HTTPS only (if using HTTPS)
+        false);        // Ensure the cookie is sent over HTTPS only (if using HTTPS)
       tokenCookie.setPath("/");           // Adjust the path as needed for your application
       // Optionally, you can set a max age: tokenCookie.setMaxAge(60 * 15); // 15 minutes, for example
       response.addCookie(tokenCookie);

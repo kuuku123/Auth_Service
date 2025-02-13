@@ -9,6 +9,7 @@ COPY build/libs/auth-service.jar /app/auth-service.jar
 
 # Expose the application port
 EXPOSE 8084
+EXPOSE 5005
 
 # Run the application with the prod profile
 CMD ["java", "-jar", "auth-service.jar", "--spring.profiles.active=prod"]
