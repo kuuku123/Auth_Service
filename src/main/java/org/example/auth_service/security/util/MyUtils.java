@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyUtils {
 
-  public void putAccessTokenInCookie(HttpServletResponse response, String accessToken) {
+  public static void putAccessTokenInCookie(HttpServletResponse response, String accessToken) {
     Cookie tokenCookie = new Cookie("accessToken", accessToken);
     tokenCookie.setHttpOnly(
       true);
     tokenCookie.setSecure(
-      false);
+      true);
     tokenCookie.setPath("/");
     response.addCookie(tokenCookie);
   }

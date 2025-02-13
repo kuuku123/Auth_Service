@@ -40,7 +40,6 @@ public class SecurityController {
   private final SignUpFormValidator signUpFormValidator;
   private final SecurityService securityService;
   private final AuthEntityRepository authEntityRepository;
-  private final MyUtils myUtils;
 
   @InitBinder("signUpForm")
   public void initBinder(WebDataBinder webDataBinder) {
@@ -64,7 +63,7 @@ public class SecurityController {
     AuthEntity authEntity = authEntityService.saveAuthEntity(signUpForm);
     String accessToken = authEntityService.createAccessToken(authEntity.getEmail());
     authEntityService.sendSignupConfirmEmail(authEntity);
-    myUtils.putAccessTokenInCookie(response, accessToken);
+    MyUtils.putAccessTokenInCookie(response, accessToken);
 
     ApiResponse<String> apiResponse = new ApiResponse<>("sign up succeed", HttpStatus.OK,
       null);
@@ -76,7 +75,7 @@ public class SecurityController {
   public ResponseEntity<String> login(@RequestBody LoginForm loginForm,
     HttpServletResponse response) {
     String accessToken = authEntityService.login(loginForm);
-    myUtils.putAccessTokenInCookie(response, accessToken);
+    MyUtils.putAccessTokenInCookie(response, accessToken);
     ApiResponse<String> apiResponse = new ApiResponse<>("login succeed", HttpStatus.OK,
       null);
     return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.OK);
@@ -85,7 +84,7 @@ public class SecurityController {
   @PostMapping("/logout")
   public ResponseEntity<String> logout(
     HttpServletResponse response) {
-    myUtils.putAccessTokenInCookie(response, null);
+    MyUtils.putAccessTokenInCookie(response, null);
     ApiResponse<String> apiResponse = new ApiResponse<>("logout succeed", HttpStatus.OK,
       null);
     return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.OK);

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.auth_service.rest_api.service.RestApiService;
 import org.example.auth_service.security.oauth2.dto.OAuth2Dto;
+import org.example.auth_service.security.util.MyUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -76,14 +77,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
     // If an access token was extracted, set it in an HTTP-only, secure cookie.
     if (accessToken != null) {
-      Cookie tokenCookie = new Cookie("accessToken", accessToken);
-      tokenCookie.setHttpOnly(
-        true);      // Prevents client-side JavaScript from accessing the cookie
-      tokenCookie.setSecure(
-        false);        // Ensure the cookie is sent over HTTPS only (if using HTTPS)
-      tokenCookie.setPath("/");           // Adjust the path as needed for your application
-      // Optionally, you can set a max age: tokenCookie.setMaxAge(60 * 15); // 15 minutes, for example
-      response.addCookie(tokenCookie);
+      MyUtils.putAccessTokenInCookie(response, accessToken);
     }
 
     if (redirectUrl != null) {
