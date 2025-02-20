@@ -16,4 +16,10 @@ public class AuthEntityExceptionHandler {
       e.getMessage());
     return new ResponseEntity<>(new Gson().toJson(signupFailed), HttpStatus.BAD_REQUEST);
   }
+  @ExceptionHandler(SecurityException.class)
+  public ResponseEntity<String> handleUserNotFoundException(SecurityException e) {
+    ApiResponse<String> signupFailed = new ApiResponse<>(e.getMessage(), HttpStatus.BAD_REQUEST,
+            "id or password doesn't match");
+    return new ResponseEntity<>(new Gson().toJson(signupFailed), HttpStatus.BAD_REQUEST);
+  }
 }
