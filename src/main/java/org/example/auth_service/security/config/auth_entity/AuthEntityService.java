@@ -77,7 +77,7 @@ public class AuthEntityService {
     if (!passwordEncoder.matches(loginForm.getPassword(), dbPassword)) {
       throw new SecurityException();
     }
-    return createAccessToken(loginForm.getNicknameOrEmail());
+    return createAccessToken(authEntity.getEmail());
   }
 
   public String createAccessToken(String email) {
