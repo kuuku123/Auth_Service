@@ -2,7 +2,6 @@ package org.example.auth_service.security;
 
 
 import com.google.gson.Gson;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -11,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.auth_service.security.config.auth_entity.AuthEntity;
 import org.example.auth_service.security.config.auth_entity.AuthEntityRepository;
 import org.example.auth_service.security.config.auth_entity.AuthEntityService;
+import org.example.auth_service.security.config.auth_entity.dto.EmailVerificationDto;
+import org.example.auth_service.security.config.auth_entity.dto.EmailVerifyRequestDto;
 import org.example.auth_service.security.dto.LoginForm;
 import org.example.auth_service.security.dto.PasswordForm;
 import org.example.auth_service.security.dto.SignUpForm;
@@ -22,11 +23,9 @@ import org.example.auth_service.security.validator.SignUpFormValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -107,49 +106,78 @@ public class SecurityController {
     return url;
   }
 
-  @GetMapping("/resend-confirm-email")
-  public ResponseEntity<String> resendConfirmEmail(
-    @RequestHeader(MyConstants.HEADER_USER_EMAIL) String email) {
-    AuthEntity authEntity = authEntityService.getAuthEntity(email);
-    authEntity.generateEmailCheckToken();
-    authEntityService.sendSignupConfirmEmail(authEntity);
-    ApiResponse<String> apiResponse = new ApiResponse<>("resend succeed", HttpStatus.OK,
-      null);
-    return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.OK);
-  }
-
-  @GetMapping("/check-email-token")
-  public String checkEmailToken(String token, String email, Model model, HttpServletRequest request,
-    HttpServletResponse response) {
-    AuthEntity authEntity = authEntityService.getAuthEntity(email);
-    String view = "email/checked-email";
-    if (authEntity == null) {
-      model.addAttribute("error", "wrong.email");
-      return view;
+  @PostMapping("/check-and-make-email-verification-code")
+  public ResponseEntity<String> checkAndMakeEmailVerificationCode(@RequestBody
+    EmailVerifyRequestDto emailVerifyRequestDto) {
+    AuthEntity authEntity = authEntityService.checkAuthEntity(emailVerifyRequestDto.getEmail());
+    if (authEntity != null) {
+      ApiResponse<String> apiResponse = new ApiResponse<>("user with this email exist", HttpStatus.BAD_REQUEST,
+        null);
+      return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.BAD_REQUEST);
+    } else {
+      ApiResponse<String> apiResponse = new ApiResponse<>("email verification code generated", HttpStatus.OK,
+        null);
+      return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.OK);
     }
+  }
 
-    if (!authEntity.isValidToken(token)) {
-      model.addAttribute("error", "wrong.token");
-      return view;
+  @PostMapping("/verify-email")
+  public ResponseEntity<String> emailVerify(@RequestBody EmailVerificationDto emailVerificationDto) {
+    boolean verified = authEntityService.validateEmailVerificationCode(emailVerificationDto);
+    if (verified) {
+      ApiResponse<String> apiResponse = new ApiResponse<>("email verified succeed", HttpStatus.OK,
+        null);
+      return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.OK);
+    } else {
+      ApiResponse<String> apiResponse = new ApiResponse<>("email verified failed", HttpStatus.BAD_REQUEST,
+        null);
+      return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.BAD_REQUEST);
     }
-
-    authEntity.completeSignUp();
-    authEntityRepository.save(authEntity);
-    model.addAttribute("numberOfUser", authEntityRepository.count());
-    model.addAttribute("nickname", authEntity.getNickname());
-    return view;
   }
 
-  @GetMapping("/check-email-verified")
-  public ResponseEntity<String> checkEmailVerified(
-    @RequestHeader(MyConstants.HEADER_USER_EMAIL) String email) {
-    AuthEntity authEntity = authEntityService.getAuthEntity(email);
-    boolean emailVerified = authEntity.isEmailVerified();
-    ApiResponse<Boolean> apiResponse = new ApiResponse<>("email verified check succeed",
-      HttpStatus.OK,
-      emailVerified);
-    return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.OK);
-  }
+//  @GetMapping("/resend-confirm-email")
+//  public ResponseEntity<String> resendConfirmEmail(
+//    @RequestHeader(MyConstants.HEADER_USER_EMAIL) String email) {
+//    AuthEntity authEntity = authEntityService.getAuthEntity(email);
+//    authEntity.generateEmailCheckToken();
+//    authEntityService.sendSignupConfirmEmail(authEntity);
+//    ApiResponse<String> apiResponse = new ApiResponse<>("resend succeed", HttpStatus.OK,
+//      null);
+//    return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.OK);
+//  }
+//
+//  @GetMapping("/check-email-token")
+//  public String checkEmailToken(String token, String email, Model model, HttpServletRequest request,
+//    HttpServletResponse response) {
+//    AuthEntity authEntity = authEntityService.getAuthEntity(email);
+//    String view = "email/checked-email";
+//    if (authEntity == null) {
+//      model.addAttribute("error", "wrong.email");
+//      return view;
+//    }
+//
+//    if (!authEntity.isValidToken(token)) {
+//      model.addAttribute("error", "wrong.token");
+//      return view;
+//    }
+//
+//    authEntity.completeSignUp();
+//    authEntityRepository.save(authEntity);
+//    model.addAttribute("numberOfUser", authEntityRepository.count());
+//    model.addAttribute("nickname", authEntity.getNickname());
+//    return view;
+//  }
+//
+//  @GetMapping("/check-email-verified")
+//  public ResponseEntity<String> checkEmailVerified(
+//    @RequestHeader(MyConstants.HEADER_USER_EMAIL) String email) {
+//    AuthEntity authEntity = authEntityService.getAuthEntity(email);
+//    boolean emailVerified = authEntity.isEmailVerified();
+//    ApiResponse<Boolean> apiResponse = new ApiResponse<>("email verified check succeed",
+//      HttpStatus.OK,
+//      emailVerified);
+//    return new ResponseEntity<>(new Gson().toJson(apiResponse), HttpStatus.OK);
+//  }
 
 
 }
