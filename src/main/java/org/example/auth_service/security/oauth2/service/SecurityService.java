@@ -51,7 +51,6 @@ public class SecurityService {
       createdOrMergedSocialProviders += "," + oAuth2Dto.getProvider();
       createdAuthEntity.setCreatedOrMergedSocialProviders(createdOrMergedSocialProviders);
       createdAuthEntity.setSubSocialIdentifier(new BigInteger(oAuth2Dto.getAttribute("sub")));
-      createdAuthEntity.setEmailVerified(true);
       String accessToken = authEntityService.createAccessToken(oAuth2Dto.getAttribute("email"));
 
       return "redirect:" + redirectUrl + "/social-account-setPassword" + " Bearer " + accessToken;
@@ -61,10 +60,7 @@ public class SecurityService {
   @Transactional
   public AuthEntity mergeAccount(String email
   ) {
-
     AuthEntity authEntity = authEntityService.getAuthEntity(email);
-    authEntity.setEmailVerified(true);
-
     return authEntity;
   }
 }

@@ -93,7 +93,6 @@ public class AuthEntityService {
     authEntity.setNickname(nickname);
     authEntity.setEmail(email);
     authEntity.setPassword(encode);
-    authEntity.generateEmailCheckToken();
     authUserRepository.save(authEntity);
     return authEntity;
   }
@@ -134,29 +133,6 @@ public class AuthEntityService {
     });
   }
 
-  public void sendSignupConfirmEmail(AuthEntity newAuthEntity) {
-
-    Context context = new Context();
-    context.setVariable("link",
-      "/check-email-token?token=" + newAuthEntity.getEmailCheckToken() + "&email="
-        + newAuthEntity.getEmail());
-    context.setVariable("nickname", newAuthEntity.getNickname());
-    context.setVariable("linkName", "Email Verification");
-    context.setVariable("message", "Click the link to use the Study Cafe service.");
-    context.setVariable("host", authServerUrl);
-
-    executorService.submit(() -> {
-      String message = templateEngine.process("email/simple-link", context);
-
-      EmailMessage emailMessage = EmailMessage.builder()
-        .to(newAuthEntity.getEmail())
-        .from("tonydevpc123@gmail.com")
-        .subject("Study Cafe , SignUp Verification")
-        .message(message)
-        .build();
-      emailService.sendEmail(emailMessage);
-    });
-  }
 
   public void updatePassword(String email, String password) {
     getAuthEntity(email).setPassword(passwordEncoder.encode(password));

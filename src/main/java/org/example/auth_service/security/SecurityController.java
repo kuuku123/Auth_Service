@@ -61,7 +61,6 @@ public class SecurityController {
 
     AuthEntity authEntity = authEntityService.saveAuthEntity(signUpForm);
     String accessToken = authEntityService.createAccessToken(authEntity.getEmail());
-    authEntityService.sendSignupConfirmEmail(authEntity);
     MyUtils.putAccessTokenInCookie(response, accessToken);
 
     ApiResponse<String> apiResponse = new ApiResponse<>("sign up succeed", HttpStatus.OK,
