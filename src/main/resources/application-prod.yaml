@@ -6,7 +6,7 @@ spring:
     password: ENC(rTWXiexkh2PqrWj5/ARFcg==)
   jpa:
     hibernate:
-      #      ddl-auto: create
+#            ddl-auto: create
       ddl-auto: update
     #    show-sql: true
     properties:
@@ -41,6 +41,11 @@ spring:
             client-secret: ENC(peUYU35cbfi4UxhQjHvS7jJAIWdJ62XzoZ6XnYOSatkKFa4iiYFFoa/q6ur4aqYt)
             scope: email,profile
             redirect-uri: https://tonylimtest123.duckdns.org:8083/auth/login/oauth2/code/google
+
+  data:
+    redis:
+      host: redis-test
+      port: 6379
 
 logging:
   level:
