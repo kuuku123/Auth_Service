@@ -1,38 +1,23 @@
 #!/bin/bash
-
-# Exit immediately if a command exits with a non-zero status
 set -e
 
-# Step 1: Clean and package the Maven project without running tests
-echo "Running gradlew bootjar "
+echo "Running gradlew bootJar"
 ./gradlew clean bootJar
 
-# Step 2: Build the Docker image
 echo "Building Docker image..."
-docker buildx build --platform linux/arm64 --load -t auth-service .
+docker buildx build --load -t kuuku123/auth-service:latest .
 
-# Step 3: Tag the Docker image
-echo "Tagging Docker image..."
-docker tag auth-service:latest kuuku123/auth-service:latest
-
-# Step 4: Push the Docker image to Docker Hub (if logged in)
-if docker info | grep -q "Username"; then
-  echo "Pushing Docker image to Docker Hub..."
+if docker info 2>/dev/null | grep -q "Username"; then
+  echo "Pushing Docker image..."
   docker push kuuku123/auth-service:latest
 else
-  echo "Not logged into Docker. Skipping Docker image push."
+  echo "Not logged in. Skipping push."
 fi
 
-# Step 5: Bring down any existing Docker Compose services
-echo "Stopping and removing existing Docker containers..."
-docker-compose -f deploy.yml down
+echo "Stopping existing containers..."
+docker compose -f deploy.yml down
 
-# Step 6: Start Docker Compose services
-echo "Starting Docker Compose services..."
-docker-compose -f deploy.yml up
+echo "Starting services..."
+docker compose -f deploy.yml up -d
 
 echo "Deployment complete!"
-
-
-
-

@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(TBJQL3YGMXL1eiDzwC+1lIDHY3HbG17ZLFNGHPCknLDPG5iDOMMTA6R+KSSQ07DSjozLZRG4iNVySKm4095AxSbgjfLtHIEhylyy4GWwccgkNPJI38PXzg==)
-    username: ENC(PM6hzMZxoQxfeMYEjlqe9Q==)
-    password: ENC(k+QRlojJ5PRJcIcwoBZGhA==)
+    url: ENC(9FPdRcbVh37v+K2FPRsh0bXGaPMfp1JmjVBjk4NIKXSQR2inyeNj/34b+Gd0FVY3QLZow+t63HkEurRDPuSvXGtjXc8OnXZxGj9JCRnLCjc6IbWUjmFUsg==)
+    username: ENC(EHeF2MsT8ECT6b6Oo+fT3Q==)
+    password: ENC(MOZSedVtA6EAOfQ8z65mFg==)
   jpa:
     hibernate:
 #      ddl-auto: create
@@ -16,8 +16,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ENC(GXEU5MhA5rAmRzD9eeJVQgjiNwB7mSTLiIqkb8D90OA=)
-    password: ENC(FzUlexyhDLQSdAvxlkPSDdjqQdP1E23Fst6/6rrstIk=)
+    username: ENC(Osnh7WkPLNjska9IqTuKRW8G49XgBlRZHvw2R0XYzfY=)
+    password: ENC(ftPCzFTdz5zbQRNGPhXzZ81qbM1Qi1pPtWzMR3PUJ1I=)
     properties:
       mail:
         smtp:
