@@ -73,7 +73,7 @@ server:
       timeout: 30m
 
 jwt:
-  secret: tonylimkeytonylimkeytonylimkeytonylimkeytonylimkey
+  private-key: ${JWT_PRIVATE_KEY}
   expiration_time: 1000000
 app:
   server:

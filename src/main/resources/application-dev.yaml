@@ -71,7 +71,35 @@ server:
       timeout: 30m
 
 jwt:
-  secret: tonylimkeytonylimkeytonylimkeytonylimkeytonylimkey
+  private-key: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCWdUigDPqSa49O
+    x55R1MJjLIBihqnXVQgfBvwhpuYSYBeoCEGIeARUNRjKV9ysydid48IqB0mAnFp9
+    GsLTPTdpMxtPqEb9/wlaDhx45Y0PRLSNC+/otizbIASIJ7uPFNgHkF2rnh3/gB0T
+    yElT8rsb9FTiHtaBlF/lBC6s0kmuQZZ48iTiiNYxOX2V6V5UGf1qjogyhrAJPrJm
+    0rTEmhyh4WPbo8KmmlOzbdfiX5IsuYo7zJqZF4whNUWVUt5Y+WCwu2e5yX4khhND
+    xQ9Dhq4KDKFzJsxcOggVcCwZNCP0W88Rdhzy/fwju7zo8B0CMrLyeglgbRfXHKvq
+    0nB6TLYTAgMBAAECgf90Ewd0co7dZx2oKVh6ySkuWaayXDGrbm5VgY4CaEAW7QtT
+    Fwt3vR+Z11zIvgABTbdQF+YzhmuuTPGCkqK7VP7qqgLn8WrTiW4ti7Vrj6zDmr2w
+    EwWDAwiYBJt6byzDtdD0BOw++j0qYCwOlvX7TcgMSPMzf5b9YPqaNB/ONG2jgMcb
+    nJ7Fv0b1zV4jdc0r1DqWmiNXLoMmR/5s6Oi7VEt+UMx/5g6WAqx+0XYc3EQgByxc
+    kJUMfQGfPOJGAeWRopzc3+5Gzotw/c74dESqQ5GTuZox3U0/NfbWjb1oN3aCnF97
+    VAvkoutR+Qck0HuCE5FpuvS7CFtgGZst0s6M1/UCgYEAyqixTYsy8R1cxiUdwWZy
+    +py+QhTefYi55D9z5i6NAMBCAyDwIiz8ZaOZ1H8QVTRqlWVulCELfSV9tnnmqqZ+
+    duqia30LRZRISsmJeNZa0OE/gN2GDfjVY5mkGrCRDBdr/98gn/rMXk2r1hOsXsGl
+    dUcgSeWBdl0vn/5hNT2NVLUCgYEAvg9DI1GsrRJ2iiZ8n1m3V8/6G2pd2zoks1BT
+    WwpmgyjFPKzV5yNVAX9P20uPjqZEMzK8uIyx5qhxjnHC063m6SDZF0LqhgOOeM9x
+    Eg8nrBwbUKXfnTDTMbTOjzD07CVtsUOSX4SYQoKY2RJj/A1Gf8oSoGwHYrrKuJrf
+    bU4NJKcCgYEAoVVsWQwg0NyMN93ic02o6SQRPrA4c31+Z1uwW6XhcKCdrLnzEXH4
+    uL1mQEmraflhhG+MeXZZHBbVnogq/t2uveKKzMFuUMT8TDVnMICNKc637FHuX38h
+    +bmdb/XycsrOmpM5+MIDImv5CWL+DS1iGBw4czu3NdB3kopDPswykCUCgYBa4lt9
+    iTHkdT7AI1VWsgUtdaOo9n05Nx2Traaek2Of9qASuqdy5v9gPuwF9qUIVtOoE+wQ
+    6B6uKQBcWGQM60zPUEjfib0yJoM7nB76vsp+z9X0A83hkhZ733UjHgsQ3XkN2j0l
+    dfeFXoQO0W+EeSisNQohMmd5u87y5gRPdZJtYwKBgHup3C2YKJGz1l3PPQeMkWHe
+    xN82IW+nN2cdaRlfoRT2SYz3hPCJsMzlLpAKoLoMP9wH5MR4B1f2V+hulqYyDVFb
+    m0K4nNXuqA8ofnXLhT9i7qZiU1O1ZndOd2EcQUHItpwqMCbK0MYsaXhDzWNOlO6K
+    M4twhuEgTDoZBzWuR2Bo
+    -----END PRIVATE KEY-----
   expiration_time: 1000000
 app:
   server:

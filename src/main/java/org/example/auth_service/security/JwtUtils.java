@@ -1,56 +1,67 @@
 package org.example.auth_service.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.security.Key;
+import java.security.KeyFactory;
 import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.ZonedDateTime;
+import java.util.Base64;
 import java.util.Date;
 
 /**
- * [JWT 관련 메서드를 제공하는 클래스]
+ * [JWT 생성 전용 클래스 - RSA 비공개 키로 서명합니다]
+ * Auth_Service만 토큰을 생성하며, Api_Gateway는 공개 키만 갖습니다.
  */
 @Slf4j
 @Component
 public class JwtUtils {
 
-    private final Key key;
+    private final PrivateKey privateKey;
     private final long accessTokenExpTime;
 
     public JwtUtils(
-            @Value("${jwt.secret}") String secretKey,
+            @Value("${jwt.private-key}") String privateKeyPem,
             @Value("${jwt.expiration_time}") long accessTokenExpTime
     ) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.privateKey = loadPrivateKey(privateKeyPem);
         this.accessTokenExpTime = accessTokenExpTime;
     }
 
     /**
-     * Access Token 생성
-     * @param jwtClaimDto
-     * @return Access Token String
+     * PEM 문자열에서 RSA PrivateKey 로드 (PKCS#8 형식)
+     */
+    private PrivateKey loadPrivateKey(String pem) {
+        try {
+            String stripped = pem
+                    .replace("-----BEGIN PRIVATE KEY-----", "")
+                    .replace("-----END PRIVATE KEY-----", "")
+                    .replaceAll("\\s+", "");
+            byte[] keyBytes = Base64.getDecoder().decode(stripped);
+            PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+            return KeyFactory.getInstance("RSA").generatePrivate(spec);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to load RSA private key", e);
+        }
+    }
+
+    /**
+     * Access Token 생성 (RS256 서명)
+     *
+     * @param jwtClaimDto 클레임 정보
+     * @return Access Token 문자열
      */
     public String createAccessToken(JwtClaimDto jwtClaimDto) {
         return createToken(jwtClaimDto, accessTokenExpTime);
     }
 
-
     /**
-     * JWT 생성
-     * @param jwtClaimDto
-     * @param expireTime
-     * @return JWT String
+     * JWT 생성 (RS256)
      */
     private String createToken(JwtClaimDto jwtClaimDto, long expireTime) {
-
         Claims claims = Jwts.claims()
                 .add("nickname", jwtClaimDto.getNickname())
                 .add("email", jwtClaimDto.getEmail())
@@ -63,48 +74,7 @@ public class JwtUtils {
                 .claims(claims)
                 .issuedAt(Date.from(now.toInstant()))
                 .expiration(Date.from(tokenValidity.toInstant()))
-                .signWith(key)
+                .signWith(privateKey, Jwts.SIG.RS256)
                 .compact();
     }
-
-    /**
-     * JWT 검증
-     * @param token
-     * @return IsValidate
-     */
-    public boolean validateToken(String token) {
-        try {
-            parseClaims(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
-        }
-        return false;
-    }
-
-
-    /**
-     * JWT Claims 추출
-     * @param token
-     * @return JWT Claims
-     */
-    public Claims parseClaims(String token) {
-        Claims payload = null;
-        try {
-            JwtParser jwtParser = Jwts.parser()
-                    .verifyWith((SecretKey) key).build();
-            payload = jwtParser.parseSignedClaims(token).getPayload();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
-        return payload;
-    }
-
-
 }
